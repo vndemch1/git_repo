@@ -1,0 +1,156 @@
+1.
+// Создаем каталог для заданий урока
+vndemch@vndemch-vm:~$ mkdir ./lesson3
+// создаем файл 
+cat > file1
+Я пришел к тебе с приветом
+// копируем файл
+vndemch@vndemch-vm:~/lesson3$ cp file1 file2
+vndemch@vndemch-vm:~/lesson3$ ls
+file1  file2  lesson3.txt
+vndemch@vndemch-vm:~/lesson3$ cat file2
+Я пришел к тебе с приветом
+//Создаем символическую ссылку
+vndemch@vndemch-vm:~/lesson3$ ln -s file1 file3
+// Создаем жесткую ссылку
+vndemch@vndemch-vm:~/lesson3$ ln file1 file4
+vndemch@vndemch-vm:~/lesson3$ ls
+file1  file2  file3  file4  lesson3.txt
+vndemch@vndemch-vm:~/lesson3$ ls -ila
+итого 24
+804114 drwxr-xr-x  2 vndemch vndemch 4096 янв  8 16:26 .
+782028 drwxr-xr-x 20 vndemch vndemch 4096 янв  8 16:16 ..
+804166 -rw-r--r--  2 vndemch vndemch   48 янв  8 16:14 file1
+804165 -rw-r--r--  1 vndemch vndemch   48 янв  8 16:22 file2
+804113 lrwxrwxrwx  1 vndemch vndemch    5 янв  8 16:26 file3 -> file1
+804166 -rw-r--r--  2 vndemch vndemch   48 янв  8 16:14 file4
+vndemch@vndemch-vm:~/lesson3$ rm file1
+vndemch@vndemch-vm:~/lesson3$ ls -il
+итого 12
+804165 -rw-r--r-- 1 vndemch vndemch   48 янв  8 16:22 file2
+804113 lrwxrwxrwx 1 vndemch vndemch    5 янв  8 16:26 file3 -> file1
+804166 -rw-r--r-- 1 vndemch vndemch   48 янв  8 16:14 file4
+vndemch@vndemch-vm:~/lesson3$ cat file3
+cat: file3: Нет такого файла или каталога
+vndemch@vndemch-vm:~/lesson3$ cat file4
+Я пришел к тебе с приветом
+
+
+
+2.
+mv file4 hardlinkfile
+ln -s file1 softlinkfile
+
+ls
+file1  file2  hardlinkfile  lesson3.txt  softlinkfile
+
+vndemch@vndemch-vm:~/lesson3$ ls -il
+итого 16
+783208 -rw-r--r-- 1 vndemch vndemch   48 янв  8 18:18 file1
+804165 -rw-r--r-- 1 vndemch vndemch   48 янв  8 16:22 file2
+804166 -rw-r--r-- 1 vndemch vndemch   48 янв  8 16:14 hardlinkfile
+804108 -rw-r--r-- 1 vndemch vndemch 1612 янв  8 16:44 lesson3.txt
+803776 lrwxrwxrwx 1 vndemch vndemch    5 янв  8 18:18 softlinkfile -> file1
+
+vndemch@vndemch-vm:~/lesson3$ mkdir lesson21
+vndemch@vndemch-vm:~/lesson3$ mv ./*linkfile ./lesson21/
+
+vndemch@vndemch-vm:~/lesson3$ cd lesson21
+vndemch@vndemch-vm:~/lesson3/lesson21$ ls
+hardlinkfile  softlinkfile
+vndemch@vndemch-vm:~/lesson3/lesson21$ cat hardlinkfile 
+Я пришел к тебе с приветом
+vndemch@vndemch-vm:~/lesson3/lesson21$ cat softlinkfile 
+cat: softlinkfile: Нет такого файла или каталога
+
+
+
+
+3.
+vndemch@vndemch-vm:~/lesson3/l3$ touch file1 file2
+vndemch@vndemch-vm:~/lesson3/l3$ ls -l
+итого 0
+-rw-r--r-- 1 vndemch vndemch 0 янв  8 18:26 file1
+-rw-r--r-- 1 vndemch vndemch 0 янв  8 18:26 file2
+
+vndemch@vndemch-vm:~/lesson3/l3$ chmod 664 file1
+// Для наглядности устанавливаем все разрешения файлу
+vndemch@vndemch-vm:~/lesson3/l3$ chmod 777 file2
+vndemch@vndemch-vm:~/lesson3/l3$ chmod u=rw,g=r,o=r file2
+
+
+
+4.
+Самый простой способ для существующего пользователя - изменить uid и gid в файле /etc/passwd на значения 0
+Можно сразу создать пользователя с правами рута: useradd -ou 0 -g 0 toberoot
+
+5.
+// Создаем группу и двух пользователей
+root@vndemch-vm:/home/vndemch# groupadd developer
+root@vndemch-vm:/home/vndemch# useradd -m -G developer -s /bin/bash programmer
+root@vndemch-vm:/home/vndemch# useradd -m -G developer -s /bin/bash designer
+
+// Создаем общий каталог сразу с нужным атрибутом и меняем группу
+root@vndemch-vm:/home/vndemch# mkdir -m g+s /home/developer
+root@vndemch-vm:/home/vndemch# chgrp developer /home/developer
+
+// В каталоге /home домашние каталоги пользователей и общ9ий каталог
+root@vndemch-vm:/home/vndemch# ls -l /home
+итого 20
+drwxr-xr-x  2 designer   designer   4096 янв  9 13:20 designer
+drwxrwsrwx  2 root       developer  4096 янв  9 13:28 developer
+drwxr-xr-x  2 programmer programmer 4096 янв  9 13:19 programmer
+drwxr-xr-x 14 toberoot   toberoot   4096 янв  8 20:30 toberoot
+drwxr-xr-x 20 vndemch    vndemch    4096 янв  9 13:08 vndemch
+
+// В общем каталоге создаем каждым пользователем по файлу. Один пустой
+root@vndemch-vm:/home/developer# ls -l
+итого 4
+-rw-rw-r-- 1 designer   developer 22 янв  9 13:43 design_file1
+-rw-rw-r-- 1 programmer developer  0 янв  9 13:42 prog_file1
+
+// Теперь один пользователь дописывает строку в файл другого
+designer@vndemch-vm:/home/developer$ cat >> prog_file1 
+It's Programmer's file
+
+// Размер файла изменился
+root@vndemch-vm:/home/developer# ls -l
+итого 8
+-rw-rw-r-- 1 designer   developer 22 янв  9 13:43 design_file1
+-rw-rw-r-- 1 programmer developer 23 янв  9 13:45 prog_file1
+
+
+
+6.
+root@vndemch-vm:/home/developer# chown root.root shareddir/
+root@vndemch-vm:/home/developer# chmod 1777 shareddir/
+root@vndemch-vm:/home/developer# ls -l
+итого 12
+-rw-rw-r-- 1 designer   developer   22 янв  9 13:43 design_file1
+-rw-rw-r-- 1 programmer developer   23 янв  9 13:45 prog_file1
+drwxrwxrwt 2 root       root      4096 янв  9 13:57 shareddir
+
+root@vndemch-vm:/home/developer# cd shareddir/
+root@vndemch-vm:/home/developer/shareddir# ls -l
+итого 4
+-rw-rw-r-- 1 designer   designer   0 янв  9 13:56 design_file2
+-rw-rw-r-- 1 programmer programmer 7 янв  9 14:15 progfile2
+
+designer@vndemch-vm:/home/developer/shareddir$ rm progfile2 
+rm: удалить защищенный от записи обычный файл 'progfile2'? y
+rm: невозможно удалить 'progfile2': Операция не позволена
+
+programmer@vndemch-vm:/home/developer/shareddir$ rm design_file2 
+rm: удалить защищенный от записи пустой обычный файл 'design_file2'? y
+rm: невозможно удалить 'design_file2': Операция не позволена
+programmer@vndemch-vm:/home/developer/shareddir$ rm progfile2 
+
+
+
+7.
+vndemch@vndemch-vm:~/lesson3$ chmod 333 ./hiddir/
+vndemch@vndemch-vm:~/lesson3$ cp file2 ./hiddir/
+vndemch@vndemch-vm:~/lesson3$ ls ./hiddir/
+ls: невозможно открыть каталог './hiddir/': Отказано в доступе
+vndemch@vndemch-vm:~/lesson3$ cat ./hiddir/file2
+Я пришел к тебе с приветом
