@@ -9,3 +9,15 @@ Staged - проиндексированные файлы
 Из состояния UNmodified -> Modified OR Untracked
 Из состояния Modified -> Staged
 
+2.
+Из Staged в Modified файл попадает при его изменении.
+
+3.
+Из Staged в Untracked:
+git reset HEAD file
+
+4.
+Из Modified к предыдущему снимку
+git checkout filename
+
+5.
