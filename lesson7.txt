@@ -22,3 +22,18 @@ git checkout filename
 
 5.
 
+Наверное, изменить файл, затем 
+git add file
+git reset HEAD file
+
+6.
+изменить файл, затем 
+git add file
+
+7.
+git add file
+
+8.
+git commit -am 'commit description'
+
+9.

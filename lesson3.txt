@@ -1,3 +1,4 @@
+
 1.
 // Создаем каталог для заданий урока
 vndemch@vndemch-vm:~$ mkdir ./lesson3
