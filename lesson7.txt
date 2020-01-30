@@ -1,0 +1,11 @@
+1.
+Untracked - файлы, которые добавлены в каталог, но не отслеживаются гитом
+UNmodified - зафиксированные файлы
+Modified - файлы, добавленные в репозиторий и измененные
+Staged - проиндексированные файлы
+
+Из состояния Untracked -> Staged
+Из состояния Staged -> Unmodified 
+Из состояния UNmodified -> Modified OR Untracked
+Из состояния Modified -> Staged
+
