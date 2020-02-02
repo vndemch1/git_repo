@@ -37,9 +37,15 @@ git add file
 git commit -am 'commit description'
 
 9.
+#Забираем изменения из удаленного репозитория
+git pull origin master
+#Отправляем в удаленный репозиторий свои изменения
+git push --set-upstream origin master
 #Создаем новую ветку
 git checkout -b local_feature
 #Подключаем удаленный репозиторий
 git remote add origin git@github.com:vndemch/git_repo.git
 #Пушим локальную ветку на удаленный репозиторий с другим именем
 git push origin origin/local_feature:refs/heads/remote_feature
+
+
