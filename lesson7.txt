@@ -47,5 +47,5 @@ git checkout -b local_feature
 git remote add origin git@github.com:vndemch/git_repo.git
 #Пушим локальную ветку на удаленный репозиторий с другим именем
 git push origin origin/local_feature:refs/heads/remote_feature
-
-
+#Пушим текущую локальную ветку без указания ее имени
+git push origin HEAD
